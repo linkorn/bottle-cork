@@ -116,7 +116,7 @@ class BaseCork(object):
             self._redirect(fail_redirect)
 
         return False
-
+			
     def logout(self, success_redirect='/login', fail_redirect='/login'):
         """Log the user out, remove cookie
 
@@ -524,6 +524,26 @@ class BaseCork(object):
         if user is None:
             raise AAAException("Nonexistent user.")
         user.update(pwd=password)
+
+    def change_password(self, old_password, new_password):
+        """Change user password.
+        
+        :param old_password: old password
+        :type pold_password: str.
+        :param new_password: new password
+        :type new_password: str.
+        :raises: AuthException
+        """
+        assert isinstance(old_password, str), "the old password must be a string"
+        assert isinstance(new_password, str), "the new password must be a string"
+        try:
+            username = self.current_user.username
+        except AAAException:
+            raise AuthException("User not authenticated.")
+        if not self._verify_password(username, old_password,
+            self._store.users[username]['hash']):
+            raise AuthException("Old password not correct.")
+        self.current_user.update(pwd=new_password)
 
     def make_auth_decorator(self, username=None, role=None, fixed_role=False, fail_redirect='/login'):
         '''
