@@ -26,3 +26,13 @@ Cork provides a simple set of methods to implement Authentication and Authorizat
 
 Website and Documentation:
   http://cork.firelet.net
+
+In this fork:
+
+Change password:
+
+	@bottle.post('/change_password')
+	def change_password():
+		old_password = post_get('old_password')
+		new_password = post_get('new_password')
+		aaa.change_password(old_password, new_password)
