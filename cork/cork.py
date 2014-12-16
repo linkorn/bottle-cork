@@ -32,6 +32,7 @@ import os
 import re
 import uuid
 
+
 try:
     import scrypt
     scrypt_available = True
@@ -873,7 +874,9 @@ class Mailer(object):
         msg['Subject'] = subject
         msg['From'] = self.sender
         msg['To'] = email_addr
-        part = MIMEText(email_text.encode('utf-8'), 'html')
+        msg['Content-Type'] = "text/html; charset=utf-8"
+        msg['Content-Transfer-Encoding'] = "quoted-printable"
+        part = MIMEText(email_text.encode('utf-8'), 'html', 'utf-8')
         msg.attach(part)
 
         log.debug("Sending email using %s" % self._conf['fqdn'])
